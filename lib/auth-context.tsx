@@ -103,10 +103,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth() {
   const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider')
-  }
-  return context
+
+  return (
+    context ?? {
+      user: null,
+      isLoading: true,
+      login: async () => ({ success: false }),
+      register: async () => ({ success: false }),
+      logout: () => {},
+      isAdmin: false,
+      isTrainer: false,
+      isClient: false
+    }
+  )
 }
 
 export function hasRole(user: AuthUser | null, roles: UserRole[]): boolean {
